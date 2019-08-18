@@ -22,33 +22,36 @@ def createUI(pWindowTitle, pApplyCallback):
     
     #creating input fields in UI window
     cmds.text(label='Width: ')
-    Width = cmds.intField()
+    Width = cmds.intSlider( min=2, max=10, value=0, step=1 )
     cmds.separator(h=10,style='none')
     cmds.text(label='Branch Length: ')
-    Length = cmds.intField()
+    Length = cmds.intSlider( min=5, max=25, value=0, step=1 )
     cmds.separator(h=10,style='none')
     cmds.text(label='Density: ')
-    Density = cmds.intField()
+    Density = cmds.intSlider( min=3, max=7, value=0, step=1 )
     cmds.separator(h=10,style='none')
     cmds.text(label='Leaf Length: ')
-    LeafLength = cmds.intField()
+    LeafLength = cmds.floatSlider( min=1, max=3, value=0, step=0.1 )
     cmds.separator(h=10,style='none')
     cmds.text(label='Branch Layers: ')
-    BranchLayers = cmds.intField()
+    BranchLayers = cmds.intSlider( min=2, max=7, value=0, step=1 )
     cmds.separator(h=10,style='none')
     cmds.text(label='Branch Angle: ')
-    BranchAngle = cmds.intField()
+    BranchAngle = cmds.intSlider( min=0, max=100, value=0, step=1 )
     cmds.separator(h=10,style='none')
     cmds.text(label='Trunk Height: ')
-    TrunkHeight = cmds.intField()
+    TrunkHeight = cmds.intSlider( min=2, max=15, value=0, step=1 )
     cmds.separator(h=10,style='none')
     cmds.text(label='Trunk Cone Angle: ')
-    TrunkConeAngle = cmds.intField()
+    TrunkConeAngle = cmds.intSlider( min=45, max=90, value=0, step=1 )
+    cmds.separator(h=10,style='none')
+    cmds.text(label='Trunk Cone Size: ')
+    TrunkConeSize = cmds.floatSlider( min=0.5, max=2, value=0, step=0.1)
     cmds.separator(h=10,style='none')
     
     
     #making the apply button call the applyCallback
-    cmds.button(label='Apply', command=functools.partial(pApplyCallback, Width, Length, Density, LeafLength, BranchLayers, BranchAngle, TrunkHeight, TrunkConeAngle))
+    cmds.button(label='Apply', command=functools.partial(pApplyCallback, Width, Length, Density, LeafLength, BranchLayers, BranchAngle, TrunkHeight, TrunkConeAngle, TrunkConeSize))
     
     def cancelCallback(*pArgs):
         if cmds.window(windowID, exists=True):
@@ -57,17 +60,18 @@ def createUI(pWindowTitle, pApplyCallback):
     cmds.showWindow()
     
 
-def applyCallback(pWidth, pLength, pDensity, pLeafLength, pBranchLayers, pBranchAngle, pTrunkHeight, pTrunkConeAngle, *pArgs):
+def applyCallback(pWidth, pLength, pDensity, pLeafLength, pBranchLayers, pBranchAngle, pTrunkHeight, pTrunkConeAngle, pTrunkConeSize, *pArgs):
 
 
-    Width =  cmds.intField(pWidth, query=True,value = True)
-    Length =  cmds.intField(pLength, query=True,value = True)
-    Density =  cmds.intField(pDensity, query=True,value = True)
-    LeafLength = cmds.intField(pLeafLength, query=True,value = True)
-    BranchLayers = cmds.intField(pBranchLayers, query=True,value = True)
-    BranchAngle = cmds.intField(pBranchAngle, query=True,value = True)
-    TrunkHeight = cmds.intField(pTrunkHeight, query=True,value = True)
-    TrunkConeAngle = cmds.intField(pTrunkConeAngle, query=True,value = True)
+    Width =  cmds.intSlider(pWidth, query=True,value = True)
+    Length =  cmds.intSlider(pLength, query=True,value = True)
+    Density =  cmds.intSlider(pDensity, query=True,value = True)
+    LeafLength = cmds.floatSlider(pLeafLength, query=True,value = True)
+    BranchLayers = cmds.intSlider(pBranchLayers, query=True,value = True)
+    BranchAngle = cmds.intSlider(pBranchAngle, query=True,value = True)
+    TrunkHeight = cmds.intSlider(pTrunkHeight, query=True,value = True)
+    TrunkConeAngle = cmds.intSlider(pTrunkConeAngle, query=True,value = True)
+    TrunkConeSize = cmds.floatSlider(pTrunkConeSize, query=True,value = True)
     
     cones = cmds.polyCone(r=0.5, h=0.5, name ='cone')
     cones2 = cmds.polyCone(r=0.5, h=0.5, name ='cones2')
@@ -147,7 +151,7 @@ def applyCallback(pWidth, pLength, pDensity, pLeafLength, pBranchLayers, pBranch
     cmds.move(0,TrunkHeight/2.0,0, trunk)
     cmds.move(0,TrunkHeight,0, allBranchGroup)
     trunkCones = cmds.polyCone(r=0.3, h=0.5, name ='trunkCones')
-    cmds.scale(0.7,1, 0.7, trunkCones)
+    cmds.scale(TrunkConeSize,1, TrunkConeSize, trunkCones)
     
     
     cmds.move(0,0.25, 0, trunkCones)
