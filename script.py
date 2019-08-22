@@ -1,4 +1,4 @@
-#willowScript.py
+#PalmTreeScript.py
 import maya.cmds as cmds
 import random
 import functools
